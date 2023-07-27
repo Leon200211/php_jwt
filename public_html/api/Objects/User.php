@@ -111,7 +111,56 @@ class User
         return false;
     }
 
-    // Здесь будет метод update()
+
+    /**
+     * Обновить запись пользователя
+     * @return bool
+     */
+    public function update(): bool
+    {
+
+        // Если в HTML-форме был введен пароль (необходимо обновить пароль)
+        $password_set=!empty($this->password) ? ", password = :password" : "";
+
+        // Если не введен пароль - не обновлять пароль
+        $query = "UPDATE " . $this->table_name . "
+            SET
+                firstname = :firstname,
+                lastname = :lastname,
+                email = :email
+                {$password_set}
+            WHERE id = :id";
+
+        // Подготовка запроса
+        $stmt = $this->conn->prepare($query);
+
+        // Инъекция (очистка)
+        $this->firstname=htmlspecialchars(strip_tags($this->firstname));
+        $this->lastname=htmlspecialchars(strip_tags($this->lastname));
+        $this->email=htmlspecialchars(strip_tags($this->email));
+
+        // Привязываем значения с HTML формы
+        $stmt->bindParam(":firstname", $this->firstname);
+        $stmt->bindParam(":lastname", $this->lastname);
+        $stmt->bindParam(":email", $this->email);
+
+        // Метод password_hash () для защиты пароля пользователя в базе данных
+        if(!empty($this->password)){
+            $this->password=htmlspecialchars(strip_tags($this->password));
+            $password_hash = password_hash($this->password, PASSWORD_BCRYPT);
+            $stmt->bindParam(":password", $password_hash);
+        }
+
+        // Уникальный идентификатор записи для редактирования
+        $stmt->bindParam(":id", $this->id);
+
+        // Если выполнение успешно, то информация о пользователе будет сохранена в базе данных
+        if($stmt->execute()) {
+            return true;
+        }
+
+        return false;
+    }
 
 
 
