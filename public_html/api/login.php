@@ -46,6 +46,7 @@ if ($email_exists && password_verify($data->password, $user->password)) {
         "aud" => $aud,
         "iat" => $iat,
         "nbf" => $nbf,
+        "exp" => 1690477162,
         "data" => array(
             "id" => $user->id,
             "firstname" => $user->firstname,

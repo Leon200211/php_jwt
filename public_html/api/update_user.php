@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 
 // Заголовки
 header("Access-Control-Allow-Origin: *");
@@ -59,6 +60,7 @@ if ($jwt) {
                 "aud" => $aud,
                 "iat" => $iat,
                 "nbf" => $nbf,
+                "exp" => 1000,
                 "data" => array(
                     "id" => $user->id,
                     "firstname" => $user->firstname,

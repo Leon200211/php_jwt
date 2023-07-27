@@ -1,4 +1,6 @@
 <?php
+error_reporting(0);
+
 // Заголовки
 header("Access-Control-Allow-Origin: http://localhost/rest-api-authentication-example/");
 header("Content-Type: application/json; charset=UTF-8");
